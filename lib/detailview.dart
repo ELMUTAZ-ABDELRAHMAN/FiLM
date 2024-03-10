@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Discover.dart';
 
 class DetailPage extends StatefulWidget {
-  Future<dynamic>? future;
+  Future<Discover>? future;
   int ind;
   DetailPage({super.key, this.future, required this.ind});
   @override
@@ -47,7 +49,7 @@ class _DetailPageState extends State<DetailPage> {
                 enabled: true,
                 child: CachedNetworkImage(
                     imageUrl: ''
-                        'https://image.tmdb.org/t/p/original${snapshot.data.results[widget.ind].posterPath}'),
+                        'https://image.tmdb.org/t/p/original${snapshot.data.results?[widget.ind].posterPath}'),
               ),
               ListView(
                 children: [
@@ -63,7 +65,7 @@ class _DetailPageState extends State<DetailPage> {
                         children: [
                           CachedNetworkImage(
                               imageUrl: ''
-                                  'https://image.tmdb.org/t/p/original${snapshot.data.results[widget.ind].posterPath}'),
+                                  'https://image.tmdb.org/t/p/original${snapshot.data.results?[widget.ind].posterPath}'),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(30, 0, 10, 0),
@@ -127,7 +129,7 @@ class _DetailPageState extends State<DetailPage> {
                       child: Padding(
                         padding: const EdgeInsets.all(9.0),
                         child: Text(
-                          snapshot.data.results[widget.ind].overview,
+                          snapshot.data.results?[widget.ind].overview,
                           style: const TextStyle(
                               color: Colors.white, fontSize: 18),
                         ),

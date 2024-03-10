@@ -1,12 +1,10 @@
-import 'Trending.dart';
-import 'Discover.dart';
+import 'dart:convert';
+import 'package:flutter_application_1/Discover.dart';
+import 'package:http/http.dart' as http;
 import 'detailview.dart';
-import 'http_requests.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-//infinte scrolling
 
 class Stats with ChangeNotifier {
   int _status = 0;
@@ -20,6 +18,16 @@ class Stats with ChangeNotifier {
   void decrement() {
     _status--;
     notifyListeners();
+  }
+
+  Future<Discover> getDiscover(int page) async {
+    final response = await http.get(Uri.parse(
+        'https://api.themoviedb.org/3/discover/movie?api_key=5b34660f1d2904d20899ac520dc99d07&include_adult=false&include_video=false&language=en-US&page=$page&sort_by=popularity.desc'));
+    if (response.statusCode == 200) {
+      return Discover.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load Discover');
+    }
   }
 }
 
@@ -41,16 +49,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Future<Trending>? futureTrendin;
-  Future<Discover>? futureDiscover;
-  int i = 20;
   int page = 1;
-
   @override
   void initState() {
     super.initState();
-    futureTrendin = gettrendingmovies();
-    futureDiscover = getDiscover(page);
+    Stats().getDiscover(page);
   }
 
   @override
@@ -102,26 +105,25 @@ class _HomeState extends State<Home> {
                       notification.metrics.maxScrollExtent) {
                     setState(() {
                       page++;
-                      i += 20;
                     });
                   }
                   return true;
                 },
-                child:
-                    future(futureDiscover, context.read<Stats>().status, i))),
+                child: future(Stats().getDiscover(page),
+                    context.read<Stats>().status, page))),
       ),
     );
   }
 }
 
-Widget future(Future<Discover>? futureTrendin, int status, int i) {
+Widget future(Future<Discover> future, int status, int i) {
   return FutureBuilder(
-    future: futureTrendin,
+    future: future,
     builder: (context, snapshot) {
       if (snapshot.hasData) {
         if (status == 0) {
           return ListView.builder(
-            itemCount: i,
+            itemCount: snapshot.data!.results!.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
@@ -129,14 +131,14 @@ Widget future(Future<Discover>? futureTrendin, int status, int i) {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            DetailPage(ind: index, future: futureTrendin),
+                            DetailPage(ind: index, future: future),
                       ));
                 },
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(6.0, 20.0, 6.0, 13.0),
                   child: CachedNetworkImage(
                     imageUrl:
-                        'https://image.tmdb.org/t/p/original${snapshot.data!.results![index].posterPath}',
+                        'https://image.tmdb.org/t/p/original${snapshot.data?.results?[index].posterPath}',
                     placeholder: (context, url) =>
                         const LinearProgressIndicator(),
                   ),
@@ -156,12 +158,12 @@ Widget future(Future<Discover>? futureTrendin, int status, int i) {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            DetailPage(ind: index, future: futureTrendin),
+                            DetailPage(ind: index, future: future),
                       ));
                 },
                 child: CachedNetworkImage(
                   imageUrl:
-                      'https://image.tmdb.org/t/p/original${snapshot.data!.results![index].posterPath}',
+                      'https://image.tmdb.org/t/p/original${snapshot.data!.results?[index].posterPath}',
                   placeholder: (context, url) => const LinearProgressIndicator(
                       color: Color.fromARGB(106, 184, 19, 134)),
                 ),
