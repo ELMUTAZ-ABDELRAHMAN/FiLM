@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'Trending.dart';
-import 'Discover.dart';
+import 'trending.dart';
 
 Future<Trending> gettrendingmovies() async {
   final response = await http.get(Uri.parse(
