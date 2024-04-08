@@ -1,16 +1,7 @@
-# flutter_application_1
+# FiLM
+A Multi-Platform Application Developed with the Flutter Framework using The Dart Programming Language.
+FiLM can run on iOs, MacOs, Android, Windows,  Linux and as a webpage.
 
-A new Flutter project.
+![1](https://github.com/ELMUTAZ-ABDELRAHMAN/FiLM/assets/162705072/039c2f02-f2f8-48d0-8b89-a6a1f2009157)
+![2](https://github.com/ELMUTAZ-ABDELRAHMAN/FiLM/assets/162705072/c0e517d5-cd94-4530-ac0f-55a321381dc7)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
